@@ -6,12 +6,14 @@ github.com/felixge/httpsnoop v1.0.4 h1:NFTV2Zj1bL4mc9sqWACXbQFVBBg2W3GPvqp8/ESS2
 github.com/felixge/httpsnoop v1.0.4/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=
 github.com/fsnotify/fsnotify v1.6.0/go.mod h1:sl3t1tCWJFWoRz9R8WJCbQihKKwmorjAbSClcnxKAGw=
-github.com/livebud/sse v0.0.3 h1:jTj4H1E/0kE/F4SWJ/X0F2CHy/PsUwqTS6mZWh/UALw=
-github.com/livebud/sse v0.0.3/go.mod h1:KwEVzwtkqxGLif82N2gnC5RLkIVcGX16hF8NXgM0OjA=
+github.com/livebud/sse v0.0.5 h1:cyk0YgOoHXs1zCuOU2hyYvoJYtRhEr4PA+d5kuJRRNc=
+github.com/livebud/sse v0.0.5/go.mod h1:KwEVzwtkqxGLif82N2gnC5RLkIVcGX16hF8NXgM0OjA=
 github.com/livebud/watcher v0.0.3 h1:t/pPEAezZMRuHULLCAh3wZUk/Af7spMarS4e2lwI+zY=
 github.com/livebud/watcher v0.0.3/go.mod h1:FZT6BCQso+WrBTRNvaCpfat63BSOgwltn1uo8Jl+f4s=
 github.com/matryer/is v1.4.1 h1:55ehd8zaGABKLXQUe2awZ99BD/PTc2ls+KV/dXphgEQ=
 github.com/matryer/is v1.4.1/go.mod h1:8I/i5uYgLzgsgEloJE1U6xx5HkBQpAZvepWuujKwMRU=
+github.com/matthewmueller/httpbuf v0.0.2 h1:2cjIXqKLw/WNbX/SqZfr8svxobsa/byqqlzcSuwmjjc=
+github.com/matthewmueller/httpbuf v0.0.2/go.mod h1:vXo3InwuLx0+T7xD6N3y34+MvIYWyisnFSK1wA+Z5DE=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06 h1:OkMGxebDjyw0ULyrTYWeN0UNCCkmCWfjPnIA2W6oviI=

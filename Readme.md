@@ -32,7 +32,7 @@ func main() {
 
 ### Customize live-reload behavior
 
-By default, any HTML or text document will be reloaded upon change. If you'd like to better control this behavior, you can implement your own `livereload` event handler:
+By default, any HTML or text document will be reloaded upon change. If you'd like to better control this behavior, you can implement your own `reload` event handler:
 
 ```html
 <!DOCTYPE html>
@@ -42,7 +42,7 @@ By default, any HTML or text document will be reloaded upon change. If you'd lik
     <h1>Hello</h1>
   </body>
   <script>
-    window.addEventListener("livereload", (e) => {
+    window.addEventListener("reload", (e) => {
       // Prevent the default livereload handler from running
       e.stopImmediatePropagation()
       // Listen all the events the watcher discovered
@@ -54,6 +54,21 @@ By default, any HTML or text document will be reloaded upon change. If you'd lik
   </script>
 </html>
 ```
+
+### Publishing your own events
+
+You can publish your own events with `lr.Publish`, for example:
+
+```go
+watcher.Watch(ctx, "example", func(path string) error {
+  return lr.Publish(ctx, &livereload.Event{
+    Type: "reload",
+    Data: []byte(path),
+  })
+})
+```
+
+This will trigger the `reload` event on the client-side.
 
 ## Contributors
 

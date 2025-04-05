@@ -82,8 +82,12 @@ func TestStatic(t *testing.T) {
 	defer stream.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	lr.Reload(ctx, &sse.Event{Data: []byte("hello")})
+	lr.Publish(ctx, &sse.Event{
+		Type: "reload",
+		Data: []byte("hello"),
+	})
 	event, err := stream.Next(ctx)
 	is.NoErr(err)
+	is.Equal(string(event.Type), "reload")
 	is.Equal(string(event.Data), "hello")
 }

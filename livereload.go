@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -12,19 +13,16 @@ import (
 	"github.com/matthewmueller/httpbuf"
 )
 
-// minimal logger interface that allows you to pass in a *slog.logger
-type logger interface {
-	Error(string, ...any)
-	Debug(string, ...any)
-}
+// Event is an server-sent event (SSE) that you can send to the browser
+type Event = sse.Event
 
-func New(log logger) *Reloader {
+func New(log *slog.Logger) *Reloader {
 	return &Reloader{"/livereload", log, sse.New(log)}
 }
 
 type Reloader struct {
 	Path string
-	log  logger
+	log  *slog.Logger
 	sse  *sse.Handler
 }
 
@@ -57,7 +55,7 @@ func (r *Reloader) Middleware(next http.Handler) http.Handler {
 
 // Reload sends a message to browser with the given event. Event data should
 // follow the format "op:path;op:path" format in Watch.
-func (r *Reloader) Reload(ctx context.Context, event *sse.Event) error {
+func (r *Reloader) Publish(ctx context.Context, event *Event) error {
 	return r.sse.Publish(ctx, event)
 }
 
@@ -72,7 +70,8 @@ func (r *Reloader) Watch(ctx context.Context, watchDir string) error {
 			}
 			data.WriteString(event.String())
 		}
-		err := r.Reload(ctx, &sse.Event{
+		err := r.Publish(ctx, &Event{
+			Type: "reload",
 			Data: data.Bytes(),
 		})
 		if err != nil {
@@ -85,29 +84,36 @@ func (r *Reloader) Watch(ctx context.Context, watchDir string) error {
 // Client-side livereload script that we attach to the end of the body
 const liveScript = `
 <script type="text/javascript">
-const es = new EventSource(%q)
-es.addEventListener("message", function(e) {
+const es = new EventSource(%[1]q)
+// Handle the eventsource connection
+es.addEventListener("open", function(e) {
+	console.debug("livereload: connected to", %[1]q)
+})
+// Handle reload events
+es.addEventListener("reload", function(e) {
+	console.debug("livereload: eventsource got 'reload' event")
 	const evs = e.data.split(";")
-	if (evs.length === 0) return
 	const events = []
 	for (let i = 0; i < evs.length; i++) {
 		const event = evs[i].split(":")
-		if (event.length !== 2) return
+		if (event.length !== 2) continue
 		const op = event[0]
 		const path = event[1]
 		events.push({ op, path })
 	}
-	document.dispatchEvent(new CustomEvent("livereload", {
+	document.dispatchEvent(new CustomEvent("reload", {
 		bubbles: true,
 		detail: { events }
 	}))
 })
-// Default livereload implementation. This can be overriden with
+// Default reload implementation. This can be overriden with
 // e.stopImmediatePropagation() to prevent the default behavior.
-window.addEventListener("livereload", function(e) {
+window.addEventListener("reload", function(e) {
+	console.debug("livereload: window got 'reload' event")
 	document.location.reload()
 })
 window.addEventListener("beforeunload", function() {
+	console.debug("livereload: closing event source")
 	es.close()
 })
 </script>
