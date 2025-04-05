@@ -1,3 +1,9 @@
+# 0.0.3 / 2025-04-05
+
+- **Breaking**: rename `Reload` to `Publish` and document API
+- support multiple event types
+- bump sse
+
 # 0.0.2 / 2024-03-15
 
 - add a license
