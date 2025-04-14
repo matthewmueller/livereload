@@ -39,9 +39,9 @@ func (r *Reloader) Middleware(next http.Handler) http.Handler {
 		rw := httpbuf.Wrap(w)
 		defer rw.Flush()
 		next.ServeHTTP(rw, req)
-		// Rewrite the body to include the livereload script
+		// Inject the live reload script
 		body, rewrote := rewrite(rw.Body, r.Path)
-		if !rewrote || rw.Status >= 400 {
+		if !rewrote {
 			return
 		}
 		rw.Body = body
@@ -120,10 +120,11 @@ window.addEventListener("beforeunload", function() {
 `
 
 func rewrite(data []byte, url string) ([]byte, bool) {
-	switch http.DetectContentType(data) {
-	case "text/html; charset=utf-8", "text/plain; charset=utf-8":
-		return append(data, []byte(fmt.Sprintf(liveScript, url))...), true
-	default:
+	index := bytes.Index(data, []byte("</body>"))
+	if index < 0 {
 		return data, false
 	}
+	script := fmt.Sprintf(liveScript, url)
+	data = append(data[:index], append([]byte(script), data[index:]...)...)
+	return data, true
 }
