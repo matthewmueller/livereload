@@ -1,3 +1,7 @@
+# 0.0.5 / 2025-05-18
+
+- trigger a reload if there's been a disconnect and then a reconnect
+
 # 0.0.4 / 2025-04-14
 
 - only attach script to html content that contains a </body> tag
