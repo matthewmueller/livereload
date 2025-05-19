@@ -85,9 +85,30 @@ func (r *Reloader) Watch(ctx context.Context, watchDir string) error {
 const liveScript = `
 <script type="text/javascript">
 const es = new EventSource(%[1]q)
+let needsReload = false
+
 // Handle the eventsource connection
 es.addEventListener("open", function(e) {
 	console.debug("livereload: connected to", %[1]q)
+	if (needsReload) {
+		console.debug("livereload: reloading page")
+		document.dispatchEvent(new CustomEvent("reload", {
+			bubbles: true,
+			detail: {}
+		}))
+	}
+	needsReload = false
+})
+// Handle errors
+es.addEventListener("error", function (e) {
+	if (es.readyState === EventSource.CONNECTING) {
+		console.debug("livereload: connection lost, reconnecting...")
+		needsReload = true
+  } else if (es.readyState === EventSource.CLOSED) {
+    console.debug("livereload: connection closed")
+  } else {
+    console.debug("livereload: error", e)
+  }
 })
 // Handle reload events
 es.addEventListener("reload", function(e) {
