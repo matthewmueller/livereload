@@ -1,3 +1,8 @@
+# 0.0.6 / 2025-05-26
+
+- handle external livereload with `lr.ListenAndServe(ctx, addr)`
+- handle server restarts by first checking if the page is reachable before reloading. If not reachable, we'll retry with an S-curve shaped backoff algorithm.
+
 # 0.0.5 / 2025-05-18
 
 - trigger a reload if there's been a disconnect and then a reconnect
