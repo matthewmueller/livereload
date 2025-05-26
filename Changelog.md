@@ -1,3 +1,7 @@
+# 0.0.7 / 2025-05-26
+
+- remove log
+
 # 0.0.6 / 2025-05-26
 
 - handle external livereload with `lr.ListenAndServe(ctx, addr)`
