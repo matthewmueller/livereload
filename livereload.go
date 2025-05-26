@@ -104,7 +104,6 @@ func (r *Reloader) ListenAndServe(ctx context.Context, addr string) error {
 		w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Last-Modified", "0")
-		fmt.Println("serving", getFullUrl(req))
 		w.Write(fmt.Appendf(nil, liveScript, getFullUrl(req)))
 	}))
 }
